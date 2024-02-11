@@ -1,59 +1,127 @@
 package com.example.scamdetection
 
+import android.app.Activity
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import com.example.scamdetection.databinding.FragmentBanNumbersBinding
+import com.example.scamdetection.databinding.FragmentSettingsBinding
+import java.util.Locale
+import java.util.Objects
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SettingsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SettingsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: FragmentSettingsBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var speechRecognizer: SpeechRecognizer
+    private lateinit var recognizerIntent: Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false)
+        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
+
+        // Check for microphone permission
+        if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.RECORD_AUDIO), 1)
+        } else {
+            initializeSpeechRecognizer()
+        }
+
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SettingsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SettingsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.idIVMic.setOnClickListener{
+           speechRecognizer.startListening(recognizerIntent)
+        }
+    }
+
+    private fun initializeSpeechRecognizer(){
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(requireContext())
+        speechRecognizer.setRecognitionListener(object : RecognitionListener {
+            override fun onReadyForSpeech(params: Bundle?) {
+                // Called when the speech recognition service is ready for user input
+            }
+
+            override fun onBeginningOfSpeech() {
+                // Called when the user has started to speak
+            }
+
+            override fun onRmsChanged(rmsdB: Float) {
+                // Called when the RMS (Root Mean Square) value of the audio input changes
+            }
+
+            override fun onBufferReceived(buffer: ByteArray?) {
+                // Called when partial recognition results are available
+            }
+
+            override fun onEndOfSpeech() {
+                // Called when the user has finished speaking
+            }
+
+            override fun onError(error: Int) {
+                // Called when an error occurs during speech recognition
+            }
+
+            override fun onResults(results: Bundle?) {
+                // Called when the recognition service returns final results
+                val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                if (!matches.isNullOrEmpty()) {
+                    // Process the recognized text (matches[0] contains the top result)
+                    val recognizedText = matches[0]
+                    // Do something with the recognized text, e.g., display it in a TextView
+                    binding.txtMessage.setText(recognizedText)
                 }
             }
+
+            override fun onPartialResults(partialResults: Bundle?) {
+                // Called when partial recognition results are available
+            }
+
+            override fun onEvent(eventType: Int, params: Bundle?) {
+                // Called when an event related to the recognition service occurs
+            }
+        })
+
+        recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+    }
+
+    // Override onDestroy to release SpeechRecognizer resources
+    override fun onDestroy() {
+        speechRecognizer.destroy()
+        super.onDestroy()
+    }
+
+    // Request microphone permission result
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == 1) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                initializeSpeechRecognizer()
+            } else {
+                // Handle the case where the user denied the permission
+            }
+        }
     }
 }

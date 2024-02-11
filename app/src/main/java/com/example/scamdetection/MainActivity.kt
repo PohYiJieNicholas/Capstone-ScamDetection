@@ -1,14 +1,18 @@
 package com.example.scamdetection
 
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.util.Log
 import android.view.Gravity
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -24,6 +28,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var firebaseRef: DatabaseReference
     private var banPhoneNumber:ArrayList<String> = arrayListOf()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,11 +109,13 @@ class MainActivity : AppCompatActivity() {
         Log.d("Ban Number", "Ban numbers = $retrievedList")
         for(phoneNumber in retrievedList){
             if (phoneNumber == incomingNumber){
-//                val toast = Toast.makeText(c,"Incoming call number $incomingNumber might be a scam call", Toast.LENGTH_SHORT)
-//                toast.setGravity(Gravity.CENTER,0,0)
-//                toast.show()
+                val toast = Toast.makeText(c,"Incoming call number $incomingNumber might be a scam call", Toast.LENGTH_SHORT)
+                toast.setGravity(Gravity.CENTER,0,0)
+                toast.show()
                 Log.d("Ban Number", "Might be scam")
             }
         }
     }
+
+
 }
