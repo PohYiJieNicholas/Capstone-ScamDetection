@@ -6,11 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.example.scamdetection.apiCall.PredictionData
+import com.example.scamdetection.apiCall.RetrofitInstance
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import com.example.scamdetection.databinding.FragmentBanNumbersBinding
 
 
@@ -32,6 +32,19 @@ class BanNumbersFragment : Fragment() {
         _binding = FragmentBanNumbersBinding.inflate(inflater, container, false)
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        RetrofitInstance.api.getUserData().enqueue(object : Callback<PredictionData> {
+            override fun onResponse(call: Call<PredictionData>, response: Response<PredictionData>) {
+                binding.txtPrediction.text = response.body()?.let { "ID: ${it.prediction}" }
+            }
+
+            override fun onFailure(call: Call<PredictionData>, t: Throwable) {
+                binding.txtPrediction.text = "Error: ${t.message}"
+            }
+        })
     }
 
 
