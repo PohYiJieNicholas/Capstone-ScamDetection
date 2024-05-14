@@ -1,18 +1,13 @@
 package com.example.scamdetection
 
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.speech.RecognizerIntent
 import android.util.Log
 import android.view.Gravity
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -83,7 +78,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.settings -> {
-                    replaceFragment(SettingsFragment())
+                    replaceFragment(VoiceFragment())
                     true
                 }
 

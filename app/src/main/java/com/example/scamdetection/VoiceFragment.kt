@@ -1,29 +1,21 @@
 package com.example.scamdetection
 
-import android.app.Activity
-import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
-import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
-import com.example.scamdetection.databinding.FragmentBanNumbersBinding
-import com.example.scamdetection.databinding.FragmentSettingsBinding
+import com.example.scamdetection.databinding.FragmentVoiceBinding
 import java.util.Locale
-import java.util.Objects
 
-class SettingsFragment : Fragment() {
-    private var _binding: FragmentSettingsBinding? = null
+class VoiceFragment : Fragment() {
+    private var _binding: FragmentVoiceBinding? = null
     private val binding get() = _binding!!
     private lateinit var speechRecognizer: SpeechRecognizer
     private lateinit var recognizerIntent: Intent
@@ -36,7 +28,7 @@ class SettingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        _binding = FragmentVoiceBinding.inflate(inflater, container, false)
 
         // Check for microphone permission
         if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
