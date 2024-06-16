@@ -17,16 +17,26 @@ import com.example.scamdetection.apiCall.PredictionData
 import com.example.scamdetection.apiCall.ResponseData
 import com.example.scamdetection.apiCall.RetrofitInstance
 import com.example.scamdetection.databinding.FragmentVoiceBinding
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.Locale
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class VoiceFragment : Fragment() {
     private var _binding: FragmentVoiceBinding? = null
     private val binding get() = _binding!!
     private lateinit var speechRecognizer: SpeechRecognizer
     private lateinit var recognizerIntent: Intent
+    private lateinit var firebaseRef: DatabaseReference
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +55,7 @@ class VoiceFragment : Fragment() {
             initializeSpeechRecognizer()
         }
 
+        firebaseRef = FirebaseDatabase.getInstance().getReference("Conversation")
 
         return binding.root
     }
@@ -90,6 +101,10 @@ class VoiceFragment : Fragment() {
                     // Process the recognized text (matches[0] contains the top result)
                     val recognizedText = matches[0]
                     val inputData = InputData(recognizedText)
+                    var prediction = ""
+
+                    // Get the current date
+                    val formattedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
 
                     RetrofitInstance.api.getPrediction(inputData).enqueue(object : Callback<ResponseData> {
                         override fun onResponse(call: Call<ResponseData>, response: Response<ResponseData>) {
@@ -98,6 +113,29 @@ class VoiceFragment : Fragment() {
                                 binding.txtPrediction.text= "Response: ${response.body()?.message}" +
                                         "\nReceived Data: ${response.body()?.output}" +
                                         "\nTime Taken: ${response.body()?.timeTaken}"
+                                prediction = response.body()?.output.toString()
+                                val predictionObject = PredictionData(recognizedText.toString(), prediction,formattedDate.toString())
+
+                                firebaseRef.orderByKey().limitToLast(1).addListenerForSingleValueEvent(object : ValueEventListener {
+                                    override fun onDataChange(snapshot: DataSnapshot) {
+//      
+                                        var highestKey = 0
+                                        if (snapshot.exists()) {
+                                            val lastChildSnapshot = snapshot.children.iterator().next()
+                                            highestKey = lastChildSnapshot.key?.toIntOrNull() ?: 0
+                                        }
+
+                                        // Increment the highest key and use it for the new data
+                                        val newKey = highestKey + 1
+                                        firebaseRef.child(newKey.toString()).setValue(predictionObject)
+
+
+                                    }
+                                    override fun onCancelled(error: DatabaseError) {
+                                        // Handle errors
+                                    }
+                                })
+
                             } else {
                                 binding.txtPrediction.text = "Failed to receive response"
                             }
@@ -108,8 +146,6 @@ class VoiceFragment : Fragment() {
                             Log.d("Flask test", "${t.message}")
                         }
                     })
-
-
 
                     // Do something with the recognized text, e.g., display it in a TextView
                     binding.txtMessage.text = recognizedText
