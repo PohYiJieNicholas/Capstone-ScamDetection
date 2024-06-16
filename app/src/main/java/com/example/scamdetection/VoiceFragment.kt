@@ -6,12 +6,20 @@ import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import com.example.scamdetection.apiCall.InputData
+import com.example.scamdetection.apiCall.PredictionData
+import com.example.scamdetection.apiCall.ResponseData
+import com.example.scamdetection.apiCall.RetrofitInstance
 import com.example.scamdetection.databinding.FragmentVoiceBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.Locale
 
 class VoiceFragment : Fragment() {
@@ -81,8 +89,30 @@ class VoiceFragment : Fragment() {
                 if (!matches.isNullOrEmpty()) {
                     // Process the recognized text (matches[0] contains the top result)
                     val recognizedText = matches[0]
+                    val inputData = InputData(recognizedText)
+
+                    RetrofitInstance.api.getPrediction(inputData).enqueue(object : Callback<ResponseData> {
+                        override fun onResponse(call: Call<ResponseData>, response: Response<ResponseData>) {
+//                            binding.txtPrediction.text = response.body()?.let { "Results: ${it.prediction}" }
+                            if (response.isSuccessful) {
+                                binding.txtPrediction.text= "Response: ${response.body()?.message}" +
+                                        "\nReceived Data: ${response.body()?.output}" +
+                                        "\nTime Taken: ${response.body()?.timeTaken}"
+                            } else {
+                                binding.txtPrediction.text = "Failed to receive response"
+                            }
+                        }
+
+                        override fun onFailure(call: Call<ResponseData>, t: Throwable) {
+//                            binding.txtPrediction.text = "Error: ${t.message}"
+                            Log.d("Flask test", "${t.message}")
+                        }
+                    })
+
+
+
                     // Do something with the recognized text, e.g., display it in a TextView
-                    binding.txtMessage.setText(recognizedText)
+                    binding.txtMessage.text = recognizedText
                 }
             }
 

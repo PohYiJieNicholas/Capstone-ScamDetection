@@ -13,7 +13,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="292dp"
+        android:layout_marginBottom="124dp"
         android:src="@drawable/baseline_mic_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,15 +22,27 @@
 
     <TextView
         android:id="@+id/txt_message"
-        android:layout_width="279dp"
-        android:layout_height="132dp"
+        android:layout_width="380dp"
+        android:layout_height="368dp"
         android:gravity="center"
         android:text="@string/hello_blank_fragment"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/idIVMic"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/txt_prediction"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.961" />
+        app:layout_constraintVertical_bias="0.073" />
+
+    <TextView
+        android:id="@+id/txt_prediction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/idIVMic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -36,16 +36,7 @@ class BanNumbersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        RetrofitInstance.api.getUserData().enqueue(object : Callback<PredictionData> {
-            override fun onResponse(call: Call<PredictionData>, response: Response<PredictionData>) {
-                binding.txtPrediction.text = response.body()?.let { "Results: ${it.prediction}" }
-            }
 
-            override fun onFailure(call: Call<PredictionData>, t: Throwable) {
-                binding.txtPrediction.text = "Error: ${t.message}"
-                Log.d("Flask test", "${t.message}")
-            }
-        })
     }
 
 

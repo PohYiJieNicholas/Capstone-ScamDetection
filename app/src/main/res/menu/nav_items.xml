@@ -5,6 +5,6 @@
         android:title="@string/btmNav_banNumbers" />
 
     <item
-        android:id="@+id/settings"
-        android:title="@string/btmNav_settings" />
+        android:id="@+id/prediction"
+        android:title="@string/btmNav_prediction" />
 </menu>

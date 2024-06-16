@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.settings -> {
+                R.id.prediction -> {
                     replaceFragment(VoiceFragment())
                     true
                 }
