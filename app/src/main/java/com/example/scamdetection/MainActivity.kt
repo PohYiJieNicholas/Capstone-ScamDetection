@@ -2,12 +2,15 @@ package com.example.scamdetection
 
 
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.telephony.PhoneStateListener
+import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.Gravity
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -24,6 +27,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var firebaseRef: DatabaseReference
     private var banPhoneNumber:ArrayList<String> = arrayListOf()
 
+    private lateinit var telephonyManager: TelephonyManager
+    private lateinit var phoneStateListener: PhoneStateListener
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,16 +38,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_PHONE_STATE),369)
-        }
 
-        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_CONTACTS),369)
-        }
-
-        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_CALL_LOG),369)
+        if(checkPermissions()){
+            setupPhoneStateListener()
         }
 
         firebaseRef = FirebaseDatabase.getInstance().getReference("BanNumbers")
@@ -82,11 +81,18 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
+                R.id.history-> {
+                    replaceFragment(HistoryFragment())
+                    true
+                }
+
                 else -> false
             }
         }
 
     }
+
+
 
     private fun replaceFragment(fragment: Fragment){
         val fragmentManager = supportFragmentManager
@@ -110,6 +116,51 @@ class MainActivity : AppCompatActivity() {
                 Log.d("Ban Number", "Might be scam")
             }
         }
+    }
+
+    private fun setupPhoneStateListener(){
+        telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        phoneStateListener = object : PhoneStateListener() {
+            override fun onCallStateChanged(state: Int, phoneNumber: String?) {
+                super.onCallStateChanged(state, phoneNumber)
+                when (state) {
+                    TelephonyManager.CALL_STATE_RINGING -> {
+                        // Phone is ringing
+                        Log.d("Incoming Number", "Incoming number = $phoneNumber")
+                    }
+                    TelephonyManager.CALL_STATE_OFFHOOK -> {
+                        // Call is answered
+                        replaceFragment(VoiceFragment())
+                    }
+                    TelephonyManager.CALL_STATE_IDLE -> {
+                        // Call ended
+                    }
+                }
+            }
+        }
+        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
+    }
+    private fun checkPermissions(): Boolean {
+        val permissions = arrayOf(
+            android.Manifest.permission.READ_PHONE_STATE,
+            android.Manifest.permission.READ_CONTACTS,
+            android.Manifest.permission.READ_CALL_LOG,
+            android.Manifest.permission.RECORD_AUDIO,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            android.Manifest.permission.MANAGE_OWN_CALLS
+        )
+        val granted = permissions.all {
+            ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
+        }
+        if (!granted) {
+            ActivityCompat.requestPermissions(this, permissions, 1)
+        }
+        return granted
+    }
+
+    private fun startCallScreeningService() {
+        val intent = Intent(this, MyCallScreeningService::class.java)
+        startService(intent)
     }
 
 

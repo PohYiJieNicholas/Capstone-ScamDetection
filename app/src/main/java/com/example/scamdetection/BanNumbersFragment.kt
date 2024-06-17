@@ -20,7 +20,6 @@ import com.example.scamdetection.phoneNumbers.NumberAdapter
 
 class BanNumbersFragment : Fragment() {
 
-    private var firebaseController: FirebaseController= FirebaseController()
     private var _binding : FragmentBanNumbersBinding? = null
     private val binding get() = _binding!!
 

@@ -5,4 +5,6 @@
 
     <string name="btmNav_banNumbers">Ban Numbers</string>
     <string name="btmNav_prediction">Predictions</string>
+    <string name="btmNav_history">History</string>
+
 </resources>
