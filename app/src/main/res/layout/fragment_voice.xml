@@ -32,7 +32,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="24dp"
         android:backgroundTint="@color/white"
-        android:src="@drawable/baseline_mic_none_24_white"
+        android:src="@drawable/mic_btn_default"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

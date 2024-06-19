@@ -6,7 +6,7 @@
     <string name="title_history">History</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="txt_speech_default">Tab the mic to start prediction</string>
+    <string name="txt_speech_default">Tap the mic to start prediction</string>
     <string name="txt_prediction_default">No prediction</string>
 
     <string name="btmNav_banNumbers">Ban Numbers</string>

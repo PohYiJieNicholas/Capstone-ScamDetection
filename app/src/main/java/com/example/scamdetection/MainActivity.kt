@@ -3,6 +3,7 @@ package com.example.scamdetection
 
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.telephony.PhoneStateListener
@@ -25,11 +26,12 @@ import com.google.firebase.database.ValueEventListener
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var firebaseRef: DatabaseReference
-    private var banPhoneNumber:ArrayList<String> = arrayListOf()
+//    private var banPhoneNumber:ArrayList<String> = arrayListOf()
+//
+//    private lateinit var telephonyManager: TelephonyManager
+//    private lateinit var phoneStateListener: PhoneStateListener
 
-    private lateinit var telephonyManager: TelephonyManager
-    private lateinit var phoneStateListener: PhoneStateListener
-
+    private lateinit var callReceiver: CallReceiver
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,36 +39,16 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
-        if(checkPermissions()){
-            setupPhoneStateListener()
-        }
+        checkPermissions()
 
         firebaseRef = FirebaseDatabase.getInstance().getReference("BanNumbers")
 
         val sharedPreferences = MySharedPreferences(this@MainActivity)
 
-        // add event listener for Firebase database changes
-        firebaseRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                banPhoneNumber.clear()
-                if(snapshot.exists()){
-                    for (data in snapshot.children) {
-                        val samplingResult = data.value
-                        banPhoneNumber.add(samplingResult.toString())
-                        Log.d("PhoneNumbers", "Value = $samplingResult")
-                    }
-                }
-                sharedPreferences.saveArrayList("myKey", banPhoneNumber)
-
-                Log.d("PhoneNumbers", "Ban Number = $banPhoneNumber")
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                //Toast.makeText(applicationContext, error.message, Toast.LENGTH_LONG).show()
-            }
-        })
+        callReceiver = CallReceiver()
+        val filter = IntentFilter()
+        filter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED)
+        registerReceiver(callReceiver, filter)
 
         replaceFragment(BanNumbersFragment())
 
@@ -93,8 +75,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
-
     private fun replaceFragment(fragment: Fragment){
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
@@ -103,44 +83,9 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
-    fun compareNumber(c: Context, incomingNumber:String){
-        val sharedPreferences = MySharedPreferences(c)
 
-        // Retrieve ArrayList
-        val retrievedList = sharedPreferences.getArrayList("myKey")
-        Log.d("Ban Number", "Ban numbers = $retrievedList")
-        for(phoneNumber in retrievedList){
-            if (phoneNumber == incomingNumber){
-                val toast = Toast.makeText(c,"Incoming call number $incomingNumber might be a scam call", Toast.LENGTH_SHORT)
-                toast.setGravity(Gravity.CENTER,0,0)
-                toast.show()
-                Log.d("Ban Number", "Might be scam")
-            }
-        }
-    }
 
-    private fun setupPhoneStateListener(){
-        telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        phoneStateListener = object : PhoneStateListener() {
-            override fun onCallStateChanged(state: Int, phoneNumber: String?) {
-                super.onCallStateChanged(state, phoneNumber)
-                when (state) {
-                    TelephonyManager.CALL_STATE_RINGING -> {
-                        // Phone is ringing
-                        Log.d("Incoming Number", "Incoming number = $phoneNumber")
-                    }
-                    TelephonyManager.CALL_STATE_OFFHOOK -> {
-                        // Call is answered
-                        replaceFragment(VoiceFragment())
-                    }
-                    TelephonyManager.CALL_STATE_IDLE -> {
-                        // Call ended
-                    }
-                }
-            }
-        }
-        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
-    }
+
     private fun checkPermissions(): Boolean {
         val permissions = arrayOf(
             android.Manifest.permission.READ_PHONE_STATE,
@@ -148,7 +93,10 @@ class MainActivity : AppCompatActivity() {
             android.Manifest.permission.READ_CALL_LOG,
             android.Manifest.permission.RECORD_AUDIO,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            android.Manifest.permission.MANAGE_OWN_CALLS
+            android.Manifest.permission.MANAGE_OWN_CALLS,
+            android.Manifest.permission.FOREGROUND_SERVICE,
+            android.Manifest.permission.POST_NOTIFICATIONS
+
         )
         val granted = permissions.all {
             ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
@@ -158,7 +106,5 @@ class MainActivity : AppCompatActivity() {
         }
         return granted
     }
-
-
 
 }

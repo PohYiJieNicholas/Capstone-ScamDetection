@@ -36,6 +36,7 @@ class VoiceFragment : Fragment() {
     private lateinit var speechRecognizer: SpeechRecognizer
     private lateinit var recognizerIntent: Intent
     private lateinit var firebaseRef: DatabaseReference
+    private var isListening = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,8 +66,15 @@ class VoiceFragment : Fragment() {
 
 
         binding.idIVMic.setOnClickListener{
-            binding.idIVMic.setImageResource(R.drawable.baseline_mic_24_white)
-           speechRecognizer.startListening(recognizerIntent)
+            if (isListening) {
+                speechRecognizer.stopListening()
+                isListening = false
+            }else{
+                isListening = true
+                binding.idIVMic.setImageResource(R.drawable.mic_btn_active)
+                speechRecognizer.startListening(recognizerIntent)
+            }
+
         }
     }
 
@@ -95,15 +103,15 @@ class VoiceFragment : Fragment() {
 
             override fun onEndOfSpeech() {
                 // Called when the user has finished speaking
-                binding.idIVMic.setImageResource(R.drawable.baseline_mic_none_24_white)
+                binding.idIVMic.setImageResource(R.drawable.mic_btn_default)
                 Log.d("Speech", "End of speech")
 
             }
 
             override fun onError(error: Int) {
                 // Called when an error occurs during speech recognition
-                binding.idIVMic.setImageResource(R.drawable.baseline_mic_none_24_white)
-                binding.txtPrediction.text = "Unrecognized speech"
+                binding.idIVMic.setImageResource(R.drawable.mic_btn_default)
+                binding.txtMessage.text = "Unrecognized speech"
                 Log.d("Speech", "Error: $error")
 
             }
@@ -111,7 +119,7 @@ class VoiceFragment : Fragment() {
             override fun onResults(results: Bundle?) {
                 // Called when the recognition service returns final results
                 val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                binding.idIVMic.setImageResource(R.drawable.baseline_mic_none_24_white)
+                binding.idIVMic.setImageResource(R.drawable.mic_btn_default)
 
                 if (!matches.isNullOrEmpty()) {
                     // Process the recognized text (matches[0] contains the top result)
@@ -152,7 +160,7 @@ class VoiceFragment : Fragment() {
                                 })
                             } else {
                                 binding.txtPrediction.text = "Failed to receive response"
-                                binding.idIVMic.setImageResource(R.drawable.baseline_mic_none_24_white)
+                                binding.idIVMic.setImageResource(R.drawable.mic_btn_default)
 
                             }
                         }
@@ -160,18 +168,20 @@ class VoiceFragment : Fragment() {
                         override fun onFailure(call: Call<ResponseData>, t: Throwable) {
                             binding.txtPrediction.text = "Error: ${t.message}"
                             Log.d("Flask test", "${t.message}")
-                            binding.idIVMic.setImageResource(R.drawable.baseline_mic_none_24_white)
+                            binding.idIVMic.setImageResource(R.drawable.mic_btn_default)
                         }
                     })
 
                     // Do something with the recognized text, e.g., display it in a TextView
                     binding.txtMessage.text = recognizedText
+                    isListening = false
                 }
             }
 
             override fun onPartialResults(partialResults: Bundle?) {
                 // Called when partial recognition results are available
                 Log.d("Speech", "Partial results")
+
             }
 
             override fun onEvent(eventType: Int, params: Bundle?) {
