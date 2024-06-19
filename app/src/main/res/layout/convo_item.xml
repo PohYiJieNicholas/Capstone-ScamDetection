@@ -2,8 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="@color/itemBackground"
+    android:gravity="center"
     android:orientation="vertical"
     android:padding="16dp">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,12 +18,17 @@
             android:id="@+id/label_conversation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Conversation: " />
+            android:textColor="@color/white"
+            android:text="@string/conversation"
+            android:textSize="20sp" />
+
         <TextView
             android:id="@+id/txt_conversation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="" />
+            android:textColor="@color/textColorSecondary"
+            android:text=""
+            android:textSize="20sp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -31,13 +40,19 @@
             android:id="@+id/label_prediction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Prediction: " />
+            android:textColor="@color/white"
+            android:text="@string/header_prediction"
+            android:textSize="20sp"/>
+
         <TextView
             android:id="@+id/txt_prediction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="" />
+            android:textColor="@color/textColorSecondary"
+            android:text=""
+            android:textSize="20sp"/>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -47,12 +62,17 @@
             android:id="@+id/label_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Date: " />
+            android:textColor="@color/white"
+            android:text="@string/header_date"
+            android:textSize="20sp"/>
+
         <TextView
             android:id="@+id/txt_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="" />
+            android:textColor="@color/textColorSecondary"
+            android:text=""
+            android:textSize="20sp"/>
     </LinearLayout>
 
 </LinearLayout>

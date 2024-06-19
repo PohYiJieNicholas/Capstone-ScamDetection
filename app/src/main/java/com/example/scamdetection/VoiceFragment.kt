@@ -62,7 +62,10 @@ class VoiceFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
         binding.idIVMic.setOnClickListener{
+            binding.idIVMic.setImageResource(R.drawable.baseline_mic_24_white)
            speechRecognizer.startListening(recognizerIntent)
         }
     }
@@ -72,37 +75,51 @@ class VoiceFragment : Fragment() {
         speechRecognizer.setRecognitionListener(object : RecognitionListener {
             override fun onReadyForSpeech(params: Bundle?) {
                 // Called when the speech recognition service is ready for user input
+                Log.d("Speech", "Ready for speech")
             }
 
             override fun onBeginningOfSpeech() {
                 // Called when the user has started to speak
+                Log.d("Speech", "Beginning of speech")
             }
 
             override fun onRmsChanged(rmsdB: Float) {
                 // Called when the RMS (Root Mean Square) value of the audio input changes
+                Log.d("Speech", "RMS: $rmsdB")
             }
 
             override fun onBufferReceived(buffer: ByteArray?) {
                 // Called when partial recognition results are available
+                Log.d("Speech", "Buffer received")
             }
 
             override fun onEndOfSpeech() {
                 // Called when the user has finished speaking
+                binding.idIVMic.setImageResource(R.drawable.baseline_mic_none_24_white)
+                Log.d("Speech", "End of speech")
+
             }
 
             override fun onError(error: Int) {
                 // Called when an error occurs during speech recognition
+                binding.idIVMic.setImageResource(R.drawable.baseline_mic_none_24_white)
+                binding.txtPrediction.text = "Unrecognized speech"
+                Log.d("Speech", "Error: $error")
+
             }
 
             override fun onResults(results: Bundle?) {
                 // Called when the recognition service returns final results
                 val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                binding.idIVMic.setImageResource(R.drawable.baseline_mic_none_24_white)
+
                 if (!matches.isNullOrEmpty()) {
                     // Process the recognized text (matches[0] contains the top result)
                     val recognizedText = matches[0]
                     val inputData = InputData(recognizedText)
                     var prediction = ""
 
+                    Log.d("Speech", "Recognized text: $recognizedText")
                     // Get the current date
                     val formattedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
 
@@ -110,9 +127,7 @@ class VoiceFragment : Fragment() {
                         override fun onResponse(call: Call<ResponseData>, response: Response<ResponseData>) {
 //                            binding.txtPrediction.text = response.body()?.let { "Results: ${it.prediction}" }
                             if (response.isSuccessful) {
-                                binding.txtPrediction.text= "Response: ${response.body()?.message}" +
-                                        "\nReceived Data: ${response.body()?.output}" +
-                                        "\nTime Taken: ${response.body()?.timeTaken}"
+                                binding.txtPrediction.text= "Response: ${response.body()?.message}\nReceived Data: ${response.body()?.output}\nTime Taken: ${response.body()?.timeTaken}"
                                 prediction = response.body()?.output.toString()
                                 val predictionObject = PredictionData(recognizedText.toString(), prediction,formattedDate.toString())
 
@@ -135,15 +150,17 @@ class VoiceFragment : Fragment() {
                                         // Handle errors
                                     }
                                 })
-
                             } else {
                                 binding.txtPrediction.text = "Failed to receive response"
+                                binding.idIVMic.setImageResource(R.drawable.baseline_mic_none_24_white)
+
                             }
                         }
 
                         override fun onFailure(call: Call<ResponseData>, t: Throwable) {
-//                            binding.txtPrediction.text = "Error: ${t.message}"
+                            binding.txtPrediction.text = "Error: ${t.message}"
                             Log.d("Flask test", "${t.message}")
+                            binding.idIVMic.setImageResource(R.drawable.baseline_mic_none_24_white)
                         }
                     })
 
@@ -154,10 +171,12 @@ class VoiceFragment : Fragment() {
 
             override fun onPartialResults(partialResults: Bundle?) {
                 // Called when partial recognition results are available
+                Log.d("Speech", "Partial results")
             }
 
             override fun onEvent(eventType: Int, params: Bundle?) {
                 // Called when an event related to the recognition service occurs
+                Log.d("Speech", "Event: $eventType")
             }
         })
 

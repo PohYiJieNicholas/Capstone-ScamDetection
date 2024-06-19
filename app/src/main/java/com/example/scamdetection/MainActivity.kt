@@ -68,6 +68,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        replaceFragment(BanNumbersFragment())
 
         binding.bottomNavigationView.setOnItemSelectedListener{
             when(it.itemId) {
@@ -158,10 +159,6 @@ class MainActivity : AppCompatActivity() {
         return granted
     }
 
-    private fun startCallScreeningService() {
-        val intent = Intent(this, MyCallScreeningService::class.java)
-        startService(intent)
-    }
 
 
 }

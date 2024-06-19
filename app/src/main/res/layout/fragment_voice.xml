@@ -4,17 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VoiceFragment">
+    tools:context=".VoiceFragment"
+    android:background="@color/background">
 
     <!--creating a simple image view for mic-->
+
+    <TextView
+        android:id="@+id/txt_prediction_title"
+        android:layout_width="399dp"
+        android:layout_height="46dp"
+        android:gravity="center_vertical"
+        android:text="@string/title_prediction"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/txt_message"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/idIVMic"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="124dp"
-        android:src="@drawable/baseline_mic_24"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/white"
+        android:src="@drawable/baseline_mic_none_24_white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -24,22 +42,25 @@
         android:id="@+id/txt_message"
         android:layout_width="380dp"
         android:layout_height="368dp"
+        android:layout_marginBottom="92dp"
+        android:background="@color/itemBackground"
         android:gravity="center"
-        android:text="@string/hello_blank_fragment"
+        android:text="@string/txt_speech_default"
+        android:textColor="@color/textColorSecondary"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/txt_prediction"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.487"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.073" />
+        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/txt_prediction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
-        android:text="TextView"
+        android:background="@color/itemBackground"
+        android:text="@string/txt_prediction_default"
+        android:textColor="@color/textColorSecondary"
         app:layout_constraintBottom_toTopOf="@+id/idIVMic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

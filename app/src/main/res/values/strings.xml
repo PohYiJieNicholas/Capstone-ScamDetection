@@ -1,10 +1,20 @@
 <resources>
     <string name="app_name">ScamDetection</string>
 
+    <string name="title_banNumbers">Ban Numbers</string>
+    <string name="title_prediction">Predictions</string>
+    <string name="title_history">History</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="txt_speech_default">Tab the mic to start prediction</string>
+    <string name="txt_prediction_default">No prediction</string>
 
     <string name="btmNav_banNumbers">Ban Numbers</string>
     <string name="btmNav_prediction">Predictions</string>
     <string name="btmNav_history">History</string>
+    <string name="name">Name</string>
+    <string name="conversation">Conversation:</string>
+    <string name="header_prediction">Prediction:</string>
+    <string name="header_date">Date:</string>
 
 </resources>
