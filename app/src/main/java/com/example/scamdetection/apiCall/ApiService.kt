@@ -8,8 +8,6 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface ApiService {
-//    @GET("api/data")
-//    fun getUserData():  Call<PredictionData>
 
     @POST("api/data")
     fun getPrediction(@Body inputData:InputData): Call<ResponseData>

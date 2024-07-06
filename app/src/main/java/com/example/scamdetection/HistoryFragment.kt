@@ -7,12 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.scamdetection.apiCall.PredictionData
 import com.example.scamdetection.conversations.ConversationAdapter
 import com.example.scamdetection.conversations.ConversationModel
 import com.example.scamdetection.databinding.FragmentHistoryBinding
-import com.example.scamdetection.databinding.FragmentVoiceBinding
-import com.example.scamdetection.phoneNumbers.NumberAdapter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference

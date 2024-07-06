@@ -43,8 +43,8 @@
 
     <TextView
         android:id="@+id/txt_message"
-        android:layout_width="380dp"
-        android:layout_height="368dp"
+        android:layout_width="379dp"
+        android:layout_height="247dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/bubble_box"
         android:gravity="center"
@@ -58,16 +58,18 @@
 
     <TextView
         android:id="@+id/txt_prediction"
-        android:layout_width="165dp"
-        android:layout_height="65dp"
-        android:layout_marginBottom="40dp"
+        android:layout_width="186dp"
+        android:layout_height="95dp"
+        android:layout_marginBottom="128dp"
         android:background="@drawable/bubble_box2"
+        android:gravity="center"
         android:text="@string/txt_prediction_default"
         android:textColor="@color/textColorSecondary"
-        android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/idIVMic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_message"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

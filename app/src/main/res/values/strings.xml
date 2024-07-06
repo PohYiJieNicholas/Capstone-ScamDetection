@@ -13,8 +13,8 @@
     <string name="btmNav_prediction">Predictions</string>
     <string name="btmNav_history">History</string>
     <string name="name">Name</string>
-    <string name="conversation">Conversation:</string>
-    <string name="header_prediction">Prediction:</string>
-    <string name="header_date">Date:</string>
+    <string name="conversation">Conversation: </string>
+    <string name="header_prediction">Prediction: </string>
+    <string name="header_date">Date: </string>
 
 </resources>

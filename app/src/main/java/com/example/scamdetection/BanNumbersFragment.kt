@@ -2,26 +2,26 @@ package com.example.scamdetection
 
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.scamdetection.apiCall.PredictionData
-import com.example.scamdetection.apiCall.RetrofitInstance
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import com.example.scamdetection.databinding.FragmentBanNumbersBinding
 import com.example.scamdetection.phoneNumbers.NumberAdapter
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 
 class BanNumbersFragment : Fragment() {
 
     private var _binding : FragmentBanNumbersBinding? = null
     private val binding get() = _binding!!
+    private var banPhoneNumber:ArrayList<String> = arrayListOf()
+    private lateinit var firebaseRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,15 +44,25 @@ class BanNumbersFragment : Fragment() {
 
         val sharedPreferences = MySharedPreferences(view.context)
 
-        // Retrieve ArrayList
-        val retrievedList = sharedPreferences.getArrayList("myKey")
-        Log.d("Ban Number Page", "Ban numbers = $retrievedList")
+        firebaseRef = FirebaseDatabase.getInstance().getReference("BanNumbers")
+        // add event listener for Firebase database changes
+        firebaseRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                banPhoneNumber.clear()
+                if(snapshot.exists()){
+                    for (data in snapshot.children) {
+                        val samplingResult = data.value
+                        banPhoneNumber.add(samplingResult.toString())
+                        Log.d("BanNumber", "Value = $samplingResult")
+                    }
+                }
+                sharedPreferences.saveArrayList("myKey", banPhoneNumber)
+                binding.rvNumber.adapter = NumberAdapter(banPhoneNumber)
 
-        binding.rvNumber.adapter = NumberAdapter(retrievedList)
-
-
-
+            }
+            override fun onCancelled(error: DatabaseError) {
+                //Toast.makeText(applicationContext, error.message, Toast.LENGTH_LONG).show()
+            }
+        })
     }
-
-
 }

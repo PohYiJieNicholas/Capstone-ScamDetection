@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.scamdetection.R
-import com.example.scamdetection.phoneNumbers.NumberAdapter.DataViewHolder
 
 class ConversationAdapter(private val convoList:ArrayList<ConversationModel>) :
     RecyclerView.Adapter<ConversationAdapter.DataViewHolder>(){
@@ -20,9 +19,9 @@ class ConversationAdapter(private val convoList:ArrayList<ConversationModel>) :
 
     override fun onBindViewHolder(holder: ConversationAdapter.DataViewHolder, position: Int) {
         val dataModel = convoList[position]
-        holder.conversation_txt.text = dataModel.conversation
-        holder.prediction_txt.text = dataModel.prediction
-        holder.date_txt.text = dataModel.date
+        holder.conversation_txt.text = " ${dataModel.conversation}"
+        holder.prediction_txt.text = " ${dataModel.prediction}"
+        holder.date_txt.text = " ${dataModel.date}"
 
     }
 
