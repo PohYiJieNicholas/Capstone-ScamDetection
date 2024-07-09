@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/banNumberTab"
+        android:icon="@drawable/baseline_numbers_24"
+        android:title="@string/btmNav_banNumbers" />
+
+    <item
+        android:id="@+id/prediction"
+        android:icon="@drawable/baseline_mic_24"
+        android:title="@string/btmNav_prediction"/>
+
+    <item
+        android:id="@+id/history"
+        android:icon="@drawable/baseline_history_24"
+        android:title="@string/btmNav_history"/>
+
+
+</menu>
