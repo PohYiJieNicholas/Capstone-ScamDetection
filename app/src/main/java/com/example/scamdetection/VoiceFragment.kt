@@ -73,6 +73,8 @@ class VoiceFragment : Fragment() {
                 isListening = true
                 binding.idIVMic.setImageResource(R.drawable.mic_btn_active)
                 speechRecognizer.startListening(recognizerIntent)
+                binding.txtMessage.text = "Listening..."
+                binding.txtPrediction.text = ""
             }
 
         }
