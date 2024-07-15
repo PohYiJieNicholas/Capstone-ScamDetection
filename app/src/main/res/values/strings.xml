@@ -16,5 +16,9 @@
     <string name="conversation">Conversation: </string>
     <string name="header_prediction">Prediction: </string>
     <string name="header_date">Date: </string>
+    <string name="header_address">Address</string>
+    <string name="header_sms_message">Sms Message</string>
+    <string name="text_sms_prediction">Sms Prediction</string>
+    <string name="btmNav_sms">SMS</string>
 
 </resources>

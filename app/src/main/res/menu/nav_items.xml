@@ -16,5 +16,10 @@
         android:icon="@drawable/baseline_history_24"
         android:title="@string/btmNav_history"/>
 
+    <item
+        android:id="@+id/sms"
+        android:icon="@drawable/baseline_history_24"
+        android:title="@string/btmNav_sms"/>
+
 
 </menu>

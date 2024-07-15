@@ -47,6 +47,11 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
+                R.id.sms-> {
+                    replaceFragment(SmsFragment())
+                    true
+                }
+
                 else -> false
             }
         }
@@ -70,7 +75,8 @@ class MainActivity : AppCompatActivity() {
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
             android.Manifest.permission.MANAGE_OWN_CALLS,
             android.Manifest.permission.FOREGROUND_SERVICE,
-            android.Manifest.permission.POST_NOTIFICATIONS
+            android.Manifest.permission.POST_NOTIFICATIONS,
+            android.Manifest.permission.READ_SMS
 
         )
         val granted = permissions.all {
