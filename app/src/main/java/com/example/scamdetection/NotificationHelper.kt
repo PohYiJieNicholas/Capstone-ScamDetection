@@ -11,13 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
-class NotificationHelper(private val context: Context) {
-
-    companion object {
-        const val CHANNEL_ID = "incoming_call_channel"
-        const val CHANNEL_NAME = "Incoming Call Notifications"
-        const val CHANNEL_DESCRIPTION = "Notifications for incoming calls"
-    }
+class NotificationHelper(private val context: Context, private val CHANNEL_ID:String, private val CHANNEL_NAME:String, private val CHANNEL_DESCRIPTION:String) {
 
     init {
         createNotificationChannel()

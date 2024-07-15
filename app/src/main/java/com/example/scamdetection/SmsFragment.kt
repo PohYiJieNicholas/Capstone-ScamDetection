@@ -24,6 +24,9 @@ import com.google.firebase.database.ValueEventListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 class SmsFragment : Fragment() {
@@ -59,7 +62,7 @@ class SmsFragment : Fragment() {
                 override fun onResponse(call: Call<ResponseData>, response: Response<ResponseData>) {
 //                            binding.txtPrediction.text = response.body()?.let { "Results: ${it.prediction}" }
                     if (response.isSuccessful) {
-                        prediction = response.body()?.output.toString()
+                        prediction = " " + response.body()?.output.toString()
                         Log.d("Sms Message", smsPredictedList.toString())
 
                         smsPredictedList.add(SmsMessage(sms.address, sms.body, sms.date, prediction))
@@ -80,7 +83,7 @@ class SmsFragment : Fragment() {
 
 
     }
-    fun readSmsMessages(context: Context): List<SmsMessage> {
+    private fun readSmsMessages(context: Context): List<SmsMessage> {
         val smsList = mutableListOf<SmsMessage>()
         val uri: Uri = Uri.parse("content://sms/inbox")
         val projection = arrayOf("_id", "address", "body", "date")
@@ -92,10 +95,10 @@ class SmsFragment : Fragment() {
             val dateIndex = it.getColumnIndex("date")
 
             while (it.moveToNext()) {
-                val address = it.getString(addressIndex)
-                val body = it.getString(bodyIndex)
-                val date = it.getString(dateIndex)
-                val inputData = InputData(body)
+                val address = " " + it.getString(addressIndex)
+                val body = " " + it.getString(bodyIndex)
+                val timeStamp = it.getLong(dateIndex)
+                val date = " " + formatDate(timeStamp)
                 val prediction = "Nothing"
                 smsList.add(SmsMessage(address, body, date, prediction))
 
@@ -103,6 +106,12 @@ class SmsFragment : Fragment() {
         }
 
         return smsList
+    }
+
+    private fun formatDate(timestamp: Long): String {
+        val date = Date(timestamp)
+        val format = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+        return format.format(date)
     }
 
 }

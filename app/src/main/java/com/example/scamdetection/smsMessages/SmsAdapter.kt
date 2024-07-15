@@ -23,12 +23,14 @@ class SmsAdapter(private val messages:List<SmsMessage>) :
 
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
         val dataModel = messages[position]
+        holder.sender.text = dataModel.address
         holder.sms.text = dataModel.body
         holder.date.text = dataModel.date
         holder.prediction.text = dataModel.prediction
     }
 
     class DataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        val sender : TextView = itemView.findViewById(R.id.txt_sender)
         val sms : TextView = itemView.findViewById(R.id.txt_sms)
         val date : TextView = itemView.findViewById(R.id.txt_sms_date)
         val prediction : TextView = itemView.findViewById(R.id.txt_sms_prediction)

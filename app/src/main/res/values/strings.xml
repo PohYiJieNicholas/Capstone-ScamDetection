@@ -3,7 +3,7 @@
 
     <string name="title_banNumbers">Ban Numbers</string>
     <string name="title_prediction">Predictions</string>
-    <string name="title_history">History</string>
+    <string name="title_history">Prediction History</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="txt_speech_default">Tap the mic to start prediction</string>
@@ -16,9 +16,10 @@
     <string name="conversation">Conversation: </string>
     <string name="header_prediction">Prediction: </string>
     <string name="header_date">Date: </string>
-    <string name="header_address">Address</string>
-    <string name="header_sms_message">Sms Message</string>
-    <string name="text_sms_prediction">Sms Prediction</string>
+    <string name="header_address">Address: </string>
+    <string name="header_sms_message">Sms Message: </string>
+    <string name="text_sms_prediction">Sms Prediction: </string>
     <string name="btmNav_sms">SMS</string>
+    <string name="header_sender">Sender:</string>
 
 </resources>

@@ -12,7 +12,7 @@ import com.example.scamdetection.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
     private lateinit var callReceiver: CallReceiver
 
 
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun replaceFragment(fragment: Fragment){
+    fun replaceFragment(fragment: Fragment){
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
@@ -76,7 +76,8 @@ class MainActivity : AppCompatActivity() {
             android.Manifest.permission.MANAGE_OWN_CALLS,
             android.Manifest.permission.FOREGROUND_SERVICE,
             android.Manifest.permission.POST_NOTIFICATIONS,
-            android.Manifest.permission.READ_SMS
+            android.Manifest.permission.READ_SMS,
+            android.Manifest.permission.RECEIVE_SMS
 
         )
         val granted = permissions.all {

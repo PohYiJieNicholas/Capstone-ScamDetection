@@ -137,7 +137,7 @@ class VoiceFragment : Fragment() {
                         override fun onResponse(call: Call<ResponseData>, response: Response<ResponseData>) {
 //                            binding.txtPrediction.text = response.body()?.let { "Results: ${it.prediction}" }
                             if (response.isSuccessful) {
-                                binding.txtPrediction.text= "Response: ${response.body()?.message}\nReceived Data: ${response.body()?.output}\nTime Taken: ${response.body()?.timeTaken}"
+                                binding.txtPrediction.text= "Response: ${response.body()?.message}\nPrediction: ${response.body()?.output}\nTime Taken: ${response.body()?.timeTaken}"
                                 prediction = response.body()?.output.toString()
                                 val predictionObject = PredictionData(recognizedText.toString(), prediction,formattedDate.toString())
 
