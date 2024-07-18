@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ScamDetection</string>
+    <string name="app_name">FraudAlert</string>
 
     <string name="title_banNumbers">Ban Numbers</string>
     <string name="title_prediction">Predictions</string>
@@ -18,7 +18,7 @@
     <string name="header_date">Date: </string>
     <string name="header_address">Address: </string>
     <string name="header_sms_message">Sms Message: </string>
-    <string name="text_sms_prediction">Sms Prediction: </string>
+    <string name="text_sms_prediction">SMS Prediction: </string>
     <string name="btmNav_sms">SMS</string>
     <string name="header_sender">Sender:</string>
 
